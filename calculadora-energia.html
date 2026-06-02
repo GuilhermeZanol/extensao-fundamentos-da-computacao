@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoWatt — Calculadora de Energia Limpa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-deep:   #0d4a2e;
+      --green-mid:    #1a7a4a;
+      --green-bright: #22c55e;
+      --teal:         #0d9488;
+      --blue-clean:   #0ea5e9;
+      --amber:        #f59e0b;
+      --cream:        #f0faf4;
+      --card-bg:      #ffffff;
+      --border:       #d1fae5;
+      --text-main:    #0f2d1c;
+      --text-muted:   #4b7a5e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(34,197,94,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(14,165,233,.10) 0%, transparent 60%),
+        var(--cream);
+    }
+    .font-display { font-family: 'DM Serif Display', serif; }
+
+    header { background: var(--green-deep); position: relative; overflow: hidden; }
+    header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 40px; background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .sdg-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px; padding: 4px 12px 4px 8px;
+      font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+      color: #bbf7d0; backdrop-filter: blur(6px);
+    }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; background: #e6f7ee; border-radius: 16px; padding: 4px; }
+    .tab-btn {
+      flex: 1; padding: 9px 4px; border: none; border-radius: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: .75rem; font-weight: 600;
+      cursor: pointer; transition: all .2s; color: var(--text-muted); background: transparent;
+      white-space: nowrap;
+    }
+    .tab-btn.active { background: #fff; color: var(--green-deep); box-shadow: 0 2px 8px rgba(13,74,46,.12); }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; box-shadow: 0 2px 20px rgba(13,74,46,.06);
+    }
+
+    /* ── Totalizador ── */
+    .totalizador {
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--teal) 100%);
+      border-radius: 24px; position: relative; overflow: hidden; color: #fff;
+    }
+    .totalizador::before {
+      content: ''; position: absolute; top: -40%; right: -20%;
+      width: 280px; height: 280px; background: rgba(255,255,255,.06); border-radius: 50%;
+    }
+    .totalizador::after {
+      content: ''; position: absolute; bottom: -30%; left: -10%;
+      width: 200px; height: 200px; background: rgba(255,255,255,.04); border-radius: 50%;
+    }
+
+    /* ── Fields ── */
+    .field {
+      background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px;
+      padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: .9rem;
+      color: var(--text-main); width: 100%; transition: border-color .2s, box-shadow .2s; outline: none;
+    }
+    .field:focus { border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(26,122,74,.15); }
+    select.field { appearance: none; cursor: pointer; }
+    label.lbl {
+      font-size: .72rem; font-weight: 600; letter-spacing: .05em;
+      color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;
+    }
+
+    /* ── Buttons ── */
+    .btn-add {
+      background: linear-gradient(135deg, var(--green-mid), var(--teal));
+      color: #fff; border: none; border-radius: 14px; padding: 12px 24px;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+      cursor: pointer; width: 100%; display: flex; align-items: center;
+      justify-content: center; gap: 8px; letter-spacing: .02em;
+      transition: transform .15s, box-shadow .2s, filter .2s;
+      box-shadow: 0 4px 16px rgba(13,148,136,.35);
+    }
+    .btn-add:hover  { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-add:active { transform: translateY(0); }
+
+    /* ── List rows ── */
+    .item-row {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 10px; align-items: center; padding: 14px 16px;
+      border-bottom: 1px solid #f0fdf4; animation: slideIn .3s ease;
+    }
+    .item-row:last-child { border-bottom: none; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .btn-del {
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+      color: #dc2626; cursor: pointer; padding: 4px 10px; font-size: .8rem;
+      font-weight: 600; transition: background .15s; flex-shrink: 0;
+    }
+    .btn-del:hover { background: #fee2e2; }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(1.4); }
+    }
+    .pulse-dot { animation: pulse 2s infinite; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,.15); border-radius: 999px;
+      padding: 2px 10px; font-size: .72rem; font-weight: 500;
+    }
+    .tarifa-card {
+      background: linear-gradient(135deg, #ecfdf5, #f0fdf9);
+      border: 1.5px solid #a7f3d0; border-radius: 16px; padding: 14px 18px;
+    }
+
+    /* ── Comparativo ── */
+    .comp-group {
+      border: 1.5px solid var(--border); border-radius: 16px;
+      padding: 16px; background: #f9fefb; position: relative; margin-bottom: 16px;
+    }
+    .comp-group-label {
+      position: absolute; top: -11px; left: 14px;
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 999px; padding: 1px 12px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .comp-item-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px; border-radius: 12px; margin-bottom: 8px;
+      animation: slideIn .3s ease;
+    }
+    .comp-item-row:last-of-type { margin-bottom: 0; }
+    .comp-best  { background: #dcfce7; border: 1.5px solid #86efac; }
+    .comp-mid   { background: #fefce8; border: 1.5px solid #fde68a; }
+    .comp-worst { background: #fef2f2; border: 1.5px solid #fca5a5; }
+
+    .comp-bar-wrap { background: rgba(0,0,0,.08); border-radius: 999px; height: 7px; overflow: hidden; margin-top: 6px; }
+    .comp-bar { height: 100%; border-radius: 999px; transition: width .6s ease; }
+    @keyframes growBar { from { width: 0%; } }
+    .grow-bar { animation: growBar .6s ease forwards; }
+
+    .insight-box {
+      border-radius: 14px; padding: 14px;
+      border: 1.5px solid #86efac; background: #f0fdf4;
+      margin-top: 10px; animation: slideIn .4s ease;
+    }
+
+    /* ── Tips ── */
+    .tip-card {
+      border-radius: 14px; padding: 14px 16px;
+      border: 1px solid var(--border); border-left: 4px solid;
+      background: #fff; margin-bottom: 10px;
+    }
+    .tip-card:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
+
+  <!-- HEADER -->
+  <header class="px-5 pt-10 pb-16 text-white text-center">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex justify-center mb-5">
+        <span class="sdg-badge">
+          <span class="text-yellow-300 text-base">⚡</span>
+          ODS 7 · Energia Limpa e Acessível
+        </span>
+      </div>
+      <h1 class="font-display text-4xl md:text-5xl leading-tight mb-3">EcoWatt</h1>
+      <p class="text-green-200 text-sm md:text-base font-light leading-relaxed max-w-xs mx-auto">
+        Calcule, compare e economize na sua conta de luz.
+      </p>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 -mt-6 space-y-5">
+
+    <!-- TOTALIZADOR -->
+    <div class="totalizador p-6 shadow-xl">
+      <div class="relative z-10">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="pulse-dot w-2 h-2 rounded-full bg-green-300 inline-block"></span>
+          <span class="text-green-200 text-xs font-semibold tracking-widest uppercase">Resumo do Mês</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-green-300 text-xs font-medium mb-1">Consumo Total</p>
+            <p class="font-display text-3xl" id="total-kwh">0,00</p>
+            <p class="text-green-300 text-sm mt-0.5">kWh / mês</p>
+          </div>
+          <div>
+            <p class="text-green-300 text-xs font-medium mb-1">Custo Estimado</p>
+            <p class="font-display text-3xl" id="total-brl">R$ 0,00</p>
+            <p class="text-green-300 text-sm mt-0.5">no mês</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/15 flex items-center gap-3 text-xs text-green-200">
+          <span class="chip">🔌 <span id="total-itens">0</span> aparelho(s)</span>
+          <span class="chip">💡 Tarifa: R$ <span id="tarifa-display">0,75</span>/kWh</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TARIFA -->
+    <div class="tarifa-card flex items-center gap-4 flex-wrap">
+      <div class="flex-1 min-w-[160px]">
+        <label class="lbl">⚡ Tarifa de Energia (R$/kWh)</label>
+        <input id="tarifa" type="number" class="field" step="0.01" min="0.01" value="0.75" />
+      </div>
+      <p class="text-xs text-green-700 leading-relaxed flex-1 min-w-[160px]">
+        Média nacional: <strong>R$ 0,75/kWh</strong>.<br/>Ajuste conforme sua distribuidora.
+      </p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-btn-calculadora" onclick="mudarAba('calculadora', this)">🔌 Calculadora</button>
+      <button class="tab-btn" id="tab-btn-comparativo"  onclick="mudarAba('comparativo', this)">⚖️ Comparativo</button>
+      <button class="tab-btn" id="tab-btn-dicas"        onclick="mudarAba('dicas', this)">🌿 Dicas</button>
+    </div>
+
+    <!-- ════ ABA: CALCULADORA ════ -->
+    <div id="aba-calculadora" class="tab-section active space-y-5">
+      <div class="card p-5 space-y-4">
+        <h2 class="font-display text-xl text-green-900">Adicionar Aparelho</h2>
+
+        <div>
+          <label class="lbl" for="aparelho">Eletrodoméstico</label>
+          <div class="relative">
+            <select id="aparelho" class="field pr-8">
+              <option value="Chuveiro Elétrico|5500">🚿 Chuveiro Elétrico</option>
+              <option value="Geladeira|150">🧊 Geladeira</option>
+              <option value="Máquina de Lavar|500">🫧 Máquina de Lavar Roupa</option>
+              <option value="Ar Condicionado|1200">❄️ Ar Condicionado</option>
+              <option value="Micro-ondas|1200">📡 Micro-ondas</option>
+              <option value="Outros|0">✏️ Outros (personalizado)</option>
+            </select>
+            <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-green-600">▾</span>
+          </div>
+        </div>
+
+        <div id="custom-nome-field" class="hidden">
+          <label class="lbl" for="custom-nome">Nome do Aparelho</label>
+          <input id="custom-nome" type="text" class="field" placeholder="Ex: Ventilador, Ferro de passar…" />
+        </div>
+
+        <div>
+          <label class="lbl" for="watts">Potência (Watts)</label>
+          <input id="watts" type="number" class="field" min="1" placeholder="Ex: 5500" />
+          <p id="watts-hint" class="text-xs text-green-500 mt-1">💡 Valor médio pré-preenchido — edite se necessário.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="lbl" for="horas">Horas/dia</label>
+            <input id="horas" type="number" class="field" step="0.1" min="0.1" max="24" placeholder="Ex: 2" />
+          </div>
+          <div>
+            <label class="lbl" for="dias">Dias no mês</label>
+            <input id="dias" type="number" class="field" min="1" max="31" placeholder="Ex: 30" />
+          </div>
+        </div>
+
+        <button class="btn-add" onclick="adicionarItem()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar à Lista
+        </button>
+        <p id="form-error" class="text-red-500 text-xs hidden text-center font-medium"></p>
+      </div>
+
+      <div class="card overflow-hidden">
+        <div class="px-5 py-4 border-b border-green-50 flex items-center justify-between">
+          <h2 class="font-display text-xl text-green-900">Meus Aparelhos</h2>
+          <button onclick="limparLista()" class="text-xs text-red-400 hover:text-red-600 font-medium transition-colors">Limpar tudo</button>
+        </div>
+        <div id="empty-state" class="flex flex-col items-center justify-center py-12 px-6 text-center">
+          <div class="text-5xl mb-3">🔌</div>
+          <p class="text-green-700 font-medium text-sm">Nenhum aparelho adicionado ainda.</p>
+          <p class="text-green-400 text-xs mt-1">Use o formulário acima para começar.</p>
+        </div>
+        <div id="table-header" class="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-2 px-5 py-2 bg-green-50 text-xs font-semibold text-green-600 uppercase tracking-wider">
+          <span>Aparelho</span>
+          <span class="text-right">Potência</span>
+          <span class="text-right">Consumo</span>
+          <span class="text-right">Custo/mês</span>
+          <span></span>
+        </div>
+        <div id="lista-items"></div>
+      </div>
+    </div>
+
+    <!-- ════ ABA: COMPARATIVO ════ -->
+    <div id="aba-comparativo" class="tab-section space-y-5">
+      <div class="card p-5 space-y-5">
+        <div>
+          <h2 class="font-display text-xl text-green-900">Comparativo de Compra</h2>
+          <p class="text-xs text-green-600 mt-1 leading-relaxed">
+            Monte grupos com os aparelhos que você está orçando (ex.: dois modelos de ar-condicionado). O app calcula qual realmente vale mais a pena, considerando o preço de compra + custo de energia ao longo de 5 anos.
+          </p>
+        </div>
+
+        <div class="bg-green-50 rounded-2xl p-4 space-y-3">
+          <h3 class="text-sm font-semibold text-green-800">➕ Adicionar aparelho ao comparativo</h3>
+
+          <div>
+            <label class="lbl" for="comp-grupo">Grupo / Categoria</label>
+            <input id="comp-grupo" type="text" class="field" placeholder='Ex: "Ar Condicionado", "Geladeira", "Lavadora"' />
+            <p class="text-xs text-green-500 mt-1">Use o mesmo nome de grupo para itens que você quer comparar entre si.</p>
+          </div>
+
+          <div>
+            <label class="lbl" for="comp-nome">Nome / Modelo do Aparelho</label>
+            <input id="comp-nome" type="text" class="field" placeholder='Ex: "Marca A 9.000 BTUs Inverter"' />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="lbl" for="comp-watts">Potência (W)</label>
+              <input id="comp-watts" type="number" class="field" min="1" placeholder="Ex: 800" />
+            </div>
+            <div>
+              <label class="lbl" for="comp-preco">Preço do aparelho (R$)</label>
+              <input id="comp-preco" type="number" class="field" min="0" step="0.01" placeholder="Ex: 1899,00" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="lbl" for="comp-horas">Horas/dia de uso</label>
+              <input id="comp-horas" type="number" class="field" step="0.1" min="0.1" max="24" placeholder="Ex: 8" />
+            </div>
+            <div>
+              <label class="lbl" for="comp-dias">Dias no mês</label>
+              <input id="comp-dias" type="number" class="field" min="1" max="31" placeholder="Ex: 30" />
+            </div>
+          </div>
+
+          <button class="btn-add" onclick="adicionarComparativo()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar ao Comparativo
+          </button>
+          <p id="comp-error" class="text-red-500 text-xs hidden text-center font-medium"></p>
+        </div>
+
+        <div id="comp-vazio" class="flex flex-col items-center py-8 text-center">
+          <div class="text-5xl mb-3">⚖️</div>
+          <p class="text-green-700 font-medium text-sm">Nenhum aparelho no comparativo.</p>
+          <p class="text-green-400 text-xs mt-1">Adicione pelo menos 2 itens no mesmo grupo para ver a análise.</p>
+        </div>
+
+        <div id="comp-resultado"></div>
+      </div>
+    </div>
+
+    <!-- ════ ABA: DICAS ════ -->
+    <div id="aba-dicas" class="tab-section space-y-5">
+
+      <!-- Preview de economia -->
+      <div class="card p-5 space-y-3">
+        <h2 class="font-display text-xl text-green-900">🧮 Seu Potencial de Economia</h2>
+        <div id="economia-preview">
+          <p class="text-sm text-green-500 italic">Adicione aparelhos na aba Calculadora para ver o potencial de economia.</p>
+        </div>
+      </div>
+
+      <!-- Alto impacto -->
+      <div class="card p-5">
+        <h2 class="font-display text-xl text-green-900 mb-4">🚀 Atitudes de Alto Impacto</h2>
+
+        <div class="tip-card" style="border-left-color:#0d9488">
+          <p class="font-semibold text-sm text-teal-800 mb-1">🚿 Troque o chuveiro elétrico pelo a gás</p>
+          <p class="text-xs text-teal-700 leading-relaxed">Um chuveiro de 5.500W usado 20 min/dia consome ~55 kWh/mês — cerca de <strong>R$ 41/mês</strong> só nesse aparelho. O a gás elimina esse custo na conta de luz. O retorno do investimento costuma vir em menos de 1 ano.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#1a7a4a">
+          <p class="font-semibold text-sm text-green-800 mb-1">❄️ Prefira ar-condicionado Inverter</p>
+          <p class="text-xs text-green-700 leading-relaxed">Aparelhos Inverter regulam a rotação do compressor e consomem até <strong>60% menos energia</strong> que os convencionais. O custo inicial é maior, mas o retorno costuma vir em 12 a 24 meses — use a aba Comparativo para calcular!</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#f59e0b">
+          <p class="font-semibold text-sm text-amber-800 mb-1">⭐ Sempre verifique o Selo PROCEL</p>
+          <p class="text-xs text-amber-700 leading-relaxed">O <strong>Selo PROCEL A</strong> identifica os equipamentos mais eficientes. Compare o consumo anual declarado na etiqueta: aparelhos classe A podem gastar <strong>até 40% menos</strong> que os de classe E ao longo dos anos.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#0ea5e9">
+          <p class="font-semibold text-sm text-blue-800 mb-1">🧊 Geladeira: posicionamento e manutenção</p>
+          <p class="text-xs text-blue-700 leading-relaxed">Mantenha a geladeira afastada 10 cm da parede e longe do fogão. Verifique a borracha da porta e limpe as serpentinas anualmente. Esses cuidados simples reduzem o consumo em até <strong>15%</strong>.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#8b5cf6">
+          <p class="font-semibold text-sm" style="color:#5b21b6;margin-bottom:4px">☀️ Considere energia solar no longo prazo</p>
+          <p class="text-xs leading-relaxed" style="color:#6d28d9">Com a redução dos custos dos painéis solares, o payback no Brasil está entre 4 e 7 anos, com vida útil de 25+ anos. Programas de financiamento do BNDES e da Caixa facilitam o acesso mesmo para renda média.</p>
+        </div>
+      </div>
+
+      <!-- Hábitos diários -->
+      <div class="card p-5">
+        <h2 class="font-display text-xl text-green-900 mb-4">📅 Hábitos do Dia a Dia</h2>
+
+        <div class="tip-card" style="border-left-color:#22c55e">
+          <p class="font-semibold text-sm text-green-800 mb-1">💡 Troque todas as lâmpadas por LED</p>
+          <p class="text-xs text-green-700 leading-relaxed">Uma LED de 9W entrega a mesma luz que uma incandescente de 60W, consumindo <strong>85% menos energia</strong> e durando 15.000 a 25.000 horas. É a troca de maior custo-benefício que existe.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#0d9488">
+          <p class="font-semibold text-sm text-teal-800 mb-1">🔌 Elimine o standby ("phantom load")</p>
+          <p class="text-xs text-teal-700 leading-relaxed">TV, micro-ondas, carregadores e roteadores em standby podem representar <strong>até 12% da conta</strong>. Use filtros de linha com interruptor ou desconecte os aparelhos que não usa com frequência.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#1a7a4a">
+          <p class="font-semibold text-sm text-green-800 mb-1">🫧 Lave roupas com água fria e carga completa</p>
+          <p class="text-xs text-green-700 leading-relaxed">Aguarde encher completamente antes de ligar — meias cargas desperdiçam água e energia. O ciclo frio limpa muito bem roupas do cotidiano e economiza o que seria gasto em aquecimento.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#f59e0b">
+          <p class="font-semibold text-sm text-amber-800 mb-1">🌡️ Ar-condicionado: mantenha 23°C</p>
+          <p class="text-xs text-amber-700 leading-relaxed">Cada grau a menos aumenta o consumo em <strong>~8%</strong>. O INMETRO recomenda entre 23°C e 24°C como faixa ideal de conforto e eficiência. Limpe os filtros mensalmente — filtros sujos aumentam o consumo em até 10%.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#0ea5e9">
+          <p class="font-semibold text-sm text-blue-800 mb-1">📡 Micro-ondas x Fogão elétrico</p>
+          <p class="text-xs text-blue-700 leading-relaxed">Para porções pequenas e reaquecimentos, o micro-ondas consome até <strong>80% menos</strong> que o fogão elétrico. Para cozinhar grandes quantidades, o fogão a gás ainda é a opção mais econômica para a maioria dos brasileiros.</p>
+        </div>
+      </div>
+
+      <!-- Guia de compra -->
+      <div class="card p-5">
+        <h2 class="font-display text-xl text-green-900 mb-4">🛒 Guia de Compra Consciente</h2>
+
+        <div class="tip-card" style="border-left-color:#1a7a4a">
+          <p class="font-semibold text-sm text-green-800 mb-1">📊 Calcule o Custo Total de Propriedade (CTP)</p>
+          <p class="text-xs text-green-700 leading-relaxed"><strong>Preço de compra + custo de energia em 5 anos = custo real.</strong> Um aparelho "barato" de R$ 900 que consome muito pode custar R$ 600 a mais na conta de luz do que um de R$ 1.400 mais eficiente. Use a aba <strong>Comparativo</strong> para simular isso automaticamente.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#0d9488">
+          <p class="font-semibold text-sm text-teal-800 mb-1">🌿 Atenção ao gás refrigerante</p>
+          <p class="text-xs text-teal-700 leading-relaxed">Prefira aparelhos com gás <strong>R-32</strong> ou <strong>R-290</strong> — menor impacto ambiental e geralmente usados em modelos mais eficientes. Evite aparelhos com R-22 (Freon), proibido em muitos países por agredir a camada de ozônio.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#f59e0b">
+          <p class="font-semibold text-sm text-amber-800 mb-1">🏦 Cuidado com o parcelamento</p>
+          <p class="text-xs text-amber-700 leading-relaxed">No Brasil, juros no parcelamento de eletrodomésticos variam de <strong>1,5% a 5% ao mês</strong>. Uma TV de R$ 2.000 em 18x pode custar R$ 3.200 no total. Some isso ao custo de energia e o "barato" pode sair muito caro.</p>
+        </div>
+
+        <div class="tip-card" style="border-left-color:#8b5cf6">
+          <p class="font-semibold text-sm" style="color:#5b21b6;margin-bottom:4px">♻️ Descarte correto de eletrodomésticos</p>
+          <p class="text-xs leading-relaxed" style="color:#6d28d9">Geladeiras e ar-condicionados velhos contêm gases e componentes tóxicos. Muitos fabricantes e prefeituras oferecem programas de coleta gratuitos. Nunca descarte no lixo comum — além de ilegal, é prejudicial ao meio ambiente.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-green-500 pb-4 leading-relaxed">
+      Os valores são estimativas baseadas nos dados informados.<br/>
+      Alinhado à <strong>ODS 7 da ONU</strong> — Energia Limpa e Acessível. 🌿
+    </p>
+  </main>
+
+  <script>
+    // ─── STATE ───────────────────────────────
+    let itens     = [];
+    let compItens = [];
+    let proximoId = 1;
+    let compId    = 1;
+
+    // ─── TABS ────────────────────────────────
+    function mudarAba(aba, btn) {
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('aba-' + aba).classList.add('active');
+      btn.classList.add('active');
+      if (aba === 'dicas') renderEconomiaPreview();
+    }
+
+    // ─── CALCULADORA ─────────────────────────
+    const selectAparelho  = document.getElementById('aparelho');
+    const inputWatts      = document.getElementById('watts');
+    const wattsHint       = document.getElementById('watts-hint');
+    const customNomeField = document.getElementById('custom-nome-field');
+    const inputHoras      = document.getElementById('horas');
+    const inputDias       = document.getElementById('dias');
+    const inputTarifa     = document.getElementById('tarifa');
+    const listaEl         = document.getElementById('lista-items');
+    const emptyState      = document.getElementById('empty-state');
+    const tableHeader     = document.getElementById('table-header');
+
+    selectAparelho.addEventListener('change', () => {
+      const [, w] = selectAparelho.value.split('|');
+      const isOutros = selectAparelho.value.startsWith('Outros');
+      customNomeField.classList.toggle('hidden', !isOutros);
+      if (!isOutros) { inputWatts.value = w; wattsHint.classList.remove('hidden'); }
+      else           { inputWatts.value = ''; wattsHint.classList.add('hidden'); }
+    });
+    inputWatts.value = selectAparelho.value.split('|')[1];
+
+    inputTarifa.addEventListener('input', () => {
+      const v = parseFloat(inputTarifa.value) || 0;
+      document.getElementById('tarifa-display').textContent = v.toFixed(2).replace('.', ',');
+      recalcularTudo();
+    });
+
+    function adicionarItem() {
+      const errEl  = document.getElementById('form-error');
+      errEl.classList.add('hidden');
+      const tarifa   = parseFloat(inputTarifa.value);
+      const horas    = parseFloat(inputHoras.value);
+      const dias     = parseFloat(inputDias.value);
+      const watts    = parseFloat(inputWatts.value);
+      const isOutros = selectAparelho.value.startsWith('Outros');
+      let nome;
+      if (isOutros) {
+        nome = document.getElementById('custom-nome').value.trim();
+        if (!nome) return mostrarErro('form-error', 'Informe o nome do aparelho.');
+      } else {
+        nome = selectAparelho.value.split('|')[0];
+      }
+      if (!watts  || watts  <= 0)               return mostrarErro('form-error', 'Informe uma potência válida em Watts.');
+      if (!horas  || horas  <= 0 || horas > 24) return mostrarErro('form-error', 'Horas de uso deve ser entre 0,1 e 24.');
+      if (!dias   || dias   <= 0 || dias  > 31) return mostrarErro('form-error', 'Dias no mês deve ser entre 1 e 31.');
+      if (!tarifa || tarifa <= 0)               return mostrarErro('form-error', 'Informe uma tarifa válida.');
+
+      const kwh   = (watts / 1000) * horas * dias;
+      const custo = kwh * tarifa;
+      itens.push({ id: proximoId++, nome, watts, horas, dias, kwh, custo });
+      renderLista(); atualizarTotais();
+      inputHoras.value = ''; inputDias.value = '';
+      if (isOutros) { document.getElementById('custom-nome').value = ''; inputWatts.value = ''; }
+      else inputWatts.value = selectAparelho.value.split('|')[1];
+    }
+
+    function removerItem(id) {
+      itens = itens.filter(i => i.id !== id);
+      renderLista(); atualizarTotais();
+    }
+
+    function limparLista() {
+      if (!itens.length) return;
+      if (!confirm('Deseja remover todos os aparelhos da lista?')) return;
+      itens = []; renderLista(); atualizarTotais();
+    }
+
+    function recalcularTudo() {
+      const tarifa = parseFloat(inputTarifa.value) || 0;
+      itens      = itens.map(i      => ({ ...i, custo: i.kwh * tarifa }));
+      compItens  = compItens.map(i  => ({ ...i, custoMes: i.kwh * tarifa, custoAno: i.kwh * tarifa * 12, custo5a: i.kwh * tarifa * 60 }));
+      renderLista(); atualizarTotais(); renderComparativo();
+    }
+
+    function renderLista() {
+      listaEl.innerHTML = '';
+      const vazio = !itens.length;
+      emptyState.classList.toggle('hidden', !vazio);
+      tableHeader.classList.toggle('hidden', vazio);
+      itens.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-row';
+        div.innerHTML = `
+          <div class="grid md:grid-cols-[2fr_1fr_1fr_1fr] gap-1 md:gap-2 flex-1 items-center">
+            <div>
+              <p class="font-medium text-sm text-green-900 leading-tight">${esc(item.nome)}</p>
+              <p class="text-xs text-green-500 mt-0.5">${item.watts}W · ${fmt1(item.horas)}h/dia · ${item.dias} dias</p>
+            </div>
+            <div class="md:text-right">
+              <span class="md:hidden text-xs text-green-400 font-semibold">Potência </span>
+              <span class="text-sm font-medium text-green-700">${item.watts} W</span>
+            </div>
+            <div class="md:text-right">
+              <span class="md:hidden text-xs text-green-400 font-semibold">Consumo </span>
+              <span class="text-sm font-semibold text-teal-700">${fmt2(item.kwh)} kWh</span>
+            </div>
+            <div class="md:text-right">
+              <span class="md:hidden text-xs text-green-400 font-semibold">Custo </span>
+              <span class="text-sm font-bold text-green-800">R$ ${fmt2(item.custo)}</span>
+            </div>
+          </div>
+          <button class="btn-del" onclick="removerItem(${item.id})">✕</button>`;
+        listaEl.appendChild(div);
+      });
+    }
+
+    function atualizarTotais() {
+      const totalKwh = itens.reduce((s, i) => s + i.kwh,   0);
+      const totalBrl = itens.reduce((s, i) => s + i.custo, 0);
+      document.getElementById('total-kwh').textContent   = fmt2(totalKwh);
+      document.getElementById('total-brl').textContent   = 'R$ ' + fmt2(totalBrl);
+      document.getElementById('total-itens').textContent = itens.length;
+    }
+
+    // ─── COMPARATIVO ─────────────────────────
+    function adicionarComparativo() {
+      const tarifa = parseFloat(inputTarifa.value);
+      const grupo  = document.getElementById('comp-grupo').value.trim();
+      const nome   = document.getElementById('comp-nome').value.trim();
+      const watts  = parseFloat(document.getElementById('comp-watts').value);
+      const preco  = parseFloat(document.getElementById('comp-preco').value) || 0;
+      const horas  = parseFloat(document.getElementById('comp-horas').value);
+      const dias   = parseFloat(document.getElementById('comp-dias').value);
+
+      if (!grupo)                               return mostrarErro('comp-error', 'Informe o nome do grupo/categoria.');
+      if (!nome)                                return mostrarErro('comp-error', 'Informe o nome/modelo do aparelho.');
+      if (!watts  || watts  <= 0)               return mostrarErro('comp-error', 'Informe uma potência válida em Watts.');
+      if (!horas  || horas  <= 0 || horas > 24) return mostrarErro('comp-error', 'Horas de uso deve ser entre 0,1 e 24.');
+      if (!dias   || dias   <= 0 || dias  > 31) return mostrarErro('comp-error', 'Dias no mês deve ser entre 1 e 31.');
+      if (!tarifa || tarifa <= 0)               return mostrarErro('comp-error', 'Defina uma tarifa válida acima.');
+
+      const kwh      = (watts / 1000) * horas * dias;
+      const custoMes = kwh * tarifa;
+      compItens.push({ id: compId++, grupo, nome, watts, preco, horas, dias, kwh, custoMes, custo5a: custoMes * 60 });
+      renderComparativo();
+      ['comp-nome','comp-watts','comp-preco','comp-horas','comp-dias'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    function removerCompItem(id) {
+      compItens = compItens.filter(i => i.id !== id);
+      renderComparativo();
+    }
+
+    function renderComparativo() {
+      const el     = document.getElementById('comp-resultado');
+      const vazio  = document.getElementById('comp-vazio');
+      const tarifa = parseFloat(inputTarifa.value) || 0.75;
+
+      // Reagrupar e recalcular com tarifa atual
+      const grupos = {};
+      compItens.forEach(i => {
+        const custoMes = i.kwh * tarifa;
+        i.custoMes = custoMes; i.custo5a = custoMes * 60;
+        if (!grupos[i.grupo]) grupos[i.grupo] = [];
+        grupos[i.grupo].push(i);
+      });
+
+      const temDados = compItens.length > 0;
+      vazio.classList.toggle('hidden', temDados);
+      if (!temDados) { el.innerHTML = ''; return; }
+
+      let html = '';
+      Object.entries(grupos).forEach(([grupo, membros]) => {
+        // Ordenar por custo total (compra + 5 anos de energia)
+        const sorted   = [...membros].sort((a, b) => (a.preco + a.custo5a) - (b.preco + b.custo5a));
+        const maxTotal = Math.max(...sorted.map(m => m.preco + m.custo5a));
+        const minTotal = Math.min(...sorted.map(m => m.preco + m.custo5a));
+
+        html += `<div class="comp-group"><span class="comp-group-label">Grupo: ${esc(grupo)}</span><div class="mt-3">`;
+
+        sorted.forEach((m, idx) => {
+          const total    = m.preco + m.custo5a;
+          const pct      = maxTotal > 0 ? Math.round((total / maxTotal) * 100) : 100;
+          const isBest   = idx === 0;
+          const isWorst  = idx === sorted.length - 1 && sorted.length > 1;
+          const rowClass = isBest ? 'comp-best' : isWorst ? 'comp-worst' : 'comp-mid';
+          const barColor = isBest ? '#16a34a' : isWorst ? '#dc2626' : '#d97706';
+          const badge    = isBest ? '✅ Mais econômico no total' : isWorst && sorted.length > 1 ? '⚠️ Mais caro no total' : '🔶 Intermediário';
+
+          html += `<div class="${rowClass} comp-item-row">
+            <div style="flex:1;min-width:0">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-xs font-bold">${badge}</span>
+                <button class="btn-del" style="padding:2px 8px;font-size:.7rem" onclick="removerCompItem(${m.id})">✕</button>
+              </div>
+              <p class="font-semibold text-sm mt-1 leading-snug">${esc(m.nome)}</p>
+              <p class="text-xs opacity-60 mt-0.5">${m.watts}W · ${fmt1(m.horas)}h/dia · ${m.dias}d/mês</p>
+              <div class="grid grid-cols-3 gap-2 mt-2 text-xs">
+                <div class="text-center">
+                  <p class="opacity-60">Aparelho</p>
+                  <p class="font-bold">R$ ${fmt2(m.preco)}</p>
+                </div>
+                <div class="text-center">
+                  <p class="opacity-60">Luz/mês</p>
+                  <p class="font-bold">R$ ${fmt2(m.custoMes)}</p>
+                </div>
+                <div class="text-center">
+                  <p class="opacity-60">Total 5 anos</p>
+                  <p class="font-bold">R$ ${fmt2(total)}</p>
+                </div>
+              </div>
+              <div class="comp-bar-wrap mt-2">
+                <div class="comp-bar grow-bar" style="width:${pct}%;background:${barColor}"></div>
+              </div>
+              <p class="text-right text-xs opacity-50 mt-0.5">${pct}% do custo máximo</p>
+            </div>
+          </div>`;
+        });
+
+        // Insight automático (só se tiver ≥2 itens no grupo)
+        if (sorted.length >= 2) {
+          const best      = sorted[0];
+          const worst     = sorted[sorted.length - 1];
+          const totalBest = best.preco  + best.custo5a;
+          const totalWorst= worst.preco + worst.custo5a;
+          const diff5a    = totalWorst - totalBest;
+          const diffMes   = worst.custoMes - best.custoMes;
+          const diffCompra= worst.preco - best.preco;
+          // Payback: quanto tempo o modelo mais eficiente (menor luz) leva para recuperar eventual maior preço
+          let paybackHtml = '';
+          if (diffMes > 0 && diffCompra > 0) {
+            const meses = Math.ceil(diffCompra / diffMes);
+            paybackHtml = `<p>⏱️ O modelo mais econômico precisa de <strong>${meses} meses</strong> para recuperar a diferença de preço de compra (R$ ${fmt2(diffCompra)}) em conta de luz.</p>`;
+          } else if (diffMes > 0 && diffCompra <= 0) {
+            paybackHtml = `<p>🏆 O modelo mais econômico também é mais barato na compra — vantagem dupla!</p>`;
+          }
+
+          html += `<div class="insight-box">
+            <p class="font-semibold text-green-800 text-sm mb-2">💡 Análise: ${esc(grupo)}</p>
+            <div class="text-xs text-green-700 space-y-1.5">
+              <p>📉 <strong>${esc(best.nome)}</strong> é a opção mais econômica considerando 5 anos de uso.</p>
+              <p>💸 Diferença total em 5 anos: <strong>R$ ${fmt2(diff5a)}</strong> a mais com a opção mais cara.</p>
+              <p>⚡ Diferença na conta de luz por mês: <strong>R$ ${fmt2(Math.abs(diffMes))}</strong>.</p>
+              ${paybackHtml}
+              <p class="pt-1.5 border-t border-green-200 mt-1.5">🌿 Aparelhos eficientes poupam dinheiro <em>e</em> reduzem emissões — a melhor escolha para o bolso e para o planeta.</p>
+            </div>
+          </div>`;
+        }
+
+        html += `</div></div>`;
+      });
+
+      el.innerHTML = html;
+    }
+
+    // ─── DICAS: PREVIEW ──────────────────────
+    function renderEconomiaPreview() {
+      const el = document.getElementById('economia-preview');
+      if (!itens.length) {
+        el.innerHTML = '<p class="text-sm text-green-500 italic">Adicione aparelhos na aba Calculadora para ver o potencial de economia.</p>';
+        return;
+      }
+      const totalMes = itens.reduce((s, i) => s + i.custo, 0);
+      const eco15    = totalMes * 0.15;
+      const eco30    = totalMes * 0.30;
+      el.innerHTML = `
+        <div class="space-y-3">
+          <div class="bg-green-50 rounded-xl p-4">
+            <p class="text-green-700 text-xs mb-1 font-medium">Gasto atual estimado (aparelhos cadastrados):</p>
+            <p class="font-display text-2xl text-green-900">R$ ${fmt2(totalMes)}<span class="text-sm font-sans text-green-500"> / mês</span></p>
+            <p class="text-xs text-green-500 mt-0.5">R$ ${fmt2(totalMes * 12)} por ano</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-teal-50 border border-teal-200 rounded-xl p-3 text-center">
+              <p class="text-xs text-teal-600 font-semibold mb-1">Com 15% de economia</p>
+              <p class="font-display text-xl text-teal-800">- R$ ${fmt2(eco15)}/mês</p>
+              <p class="text-xs text-teal-500 mt-0.5">R$ ${fmt2(eco15 * 12)}/ano a menos</p>
+            </div>
+            <div class="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+              <p class="text-xs text-green-600 font-semibold mb-1">Com 30% de economia</p>
+              <p class="font-display text-xl text-green-800">- R$ ${fmt2(eco30)}/mês</p>
+              <p class="text-xs text-green-500 mt-0.5">R$ ${fmt2(eco30 * 12)}/ano a menos</p>
+            </div>
+          </div>
+          <p class="text-xs text-green-600 leading-relaxed bg-yellow-50 border border-yellow-200 rounded-xl p-3">
+            💡 <strong>15% de economia</strong> é alcançável com hábitos simples (standby, temperatura do AC, lâmpadas LED).<br/>
+            <strong>30%</strong> já requer mudanças maiores como troca de equipamentos e uso de energia solar.
+          </p>
+        </div>`;
+    }
+
+    // ─── HELPERS ─────────────────────────────
+    function fmt1(n) { return n.toLocaleString('pt-BR', { maximumFractionDigits: 1 }); }
+    function fmt2(n) { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function mostrarErro(elId, msg) {
+      const el = document.getElementById(elId);
+      el.textContent = msg; el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3500);
+    }
+
+    // ─── INIT ────────────────────────────────
+    atualizarTotais();
+    document.getElementById('tarifa-display').textContent = '0,75';
+  </script>
+</body>
+</html>
