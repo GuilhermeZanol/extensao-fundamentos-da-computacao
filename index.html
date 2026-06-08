@@ -55,7 +55,7 @@
     h1 { font-size: 2.4rem; font-weight: 700; line-height: 1.2; }
     h2 { font-size: 1.25rem; font-weight: 600; }
     h3 { font-size: 1rem; font-weight: 600; }
-    label,p,span,input,select,button { font-family: var(--font-body); }
+    label,p,span,input,select,button { font-family: var(--font-body); font-size: 1.0rem;}
     .num { font-family: var(--font-number); font-weight: 700; }
 
     /* ── Header ── */
@@ -658,8 +658,8 @@
       in_the_month: 'this month',
       chip_appliances: 'appliance(s)',
       chip_rate: 'Rate:',
-      label_rate: 'Energy Rate ($/kWh)',
-      hint_rate: 'National average: $0.75. Check your electricity bill.',
+      label_rate: 'Energy Rate (R$/kWh)',
+      hint_rate: 'National average: R$0.75. Check your electricity bill.',
       // label_voltage: 'Your home voltage',
       v110_badge: 'Common in North/South regions',
       v220_badge: 'Common in Southeast/Midwest',
@@ -703,7 +703,7 @@
       label_comp_name: 'Name / Model',
       ph_comp_name: 'E.g.: "Brand A 9,000 BTU Inverter"',
       label_watts_short: 'Power (W)',
-      label_price: 'Appliance price ($)',
+      label_price: 'Appliance price (R$)',
       label_hours_day: 'Hours/day of use',
       btn_add_comp: 'Add to Comparison',
       comp_empty_title: 'No appliances in comparison.',
@@ -794,8 +794,8 @@
       in_the_month: 'este mes',
       chip_appliances: 'aparato(s)',
       chip_rate: 'Tarifa:',
-      label_rate: 'Tarifa de Energía ($/kWh)',
-      hint_rate: 'Promedio nacional: $0,75. Consulta tu factura de luz.',
+      label_rate: 'Tarifa de Energía (R$/kWh)',
+      hint_rate: 'Promedio nacional: R$0,75. Consulta tu factura de luz.',
       // label_voltage: 'Tensión de tu hogar',
       v110_badge: 'Común en Norte/Sur',
       v220_badge: 'Común en Sudeste/CO',
@@ -839,7 +839,7 @@
       label_comp_name: 'Nombre / Modelo',
       ph_comp_name: 'Ej: "Marca A 9.000 BTU Inverter"',
       label_watts_short: 'Potencia (W)',
-      label_price: 'Precio del aparato ($)',
+      label_price: 'Precio del aparato (R$)',
       label_hours_day: 'Horas/día de uso',
       btn_add_comp: 'Agregar a la Comparativa',
       comp_empty_title: 'Ningún aparato en la comparativa.',
@@ -849,15 +849,15 @@
       tips_impact_title: '🚀 Acciones de Alto Impacto',
       tips_habits_title: '📅 Hábitos del Día a Día',
       tips_buy_title: '🛒 Guía de Compra Consciente',
-      tip1_title: '🚿 Cambia la ducha eléctrica por una a gas',
-      tip1_body: 'Una ducha de 5.500W usada 20 min/día consume ~55 kWh/mes. La de gas elimina ese costo eléctrico y el retorno suele llegar en menos de 1 año.',
+      tip1_title: '🚿 Cambia la ducha elétrica por una a gas',
+      tip1_body: 'Una ducha de 5.500W usada 20 min/día consume ~55 kWh/mes. La de gas elimina ese costo eléctrico e o retorno suele llegar em menos de 1 ano.',
       tip2_title: '❄️ Prefiere aire acondicionado Inverter',
       tip2_body: 'Los equipos Inverter consumen hasta 60% menos energía. El retorno suele llegar en 12–24 meses — ¡usa la pestaña Comparar para calcularlo!',
       tip3_title: '⭐ Revisa siempre la etiqueta de eficiencia energética',
-      tip3_body: 'Los aparatos clase A consumen hasta 40% menos que los de clase E. Compara el consumo anual en la etiqueta antes de comprar.',
+      tip3_body: 'Los aparatos clase A consumen hasta 40% menos que los de classe E. Compara el consumo anual en la etiqueta antes de comprar.',
       tip4_title: '🧊 Refrigerador: ubicación y mantenimiento',
       tip4_body: 'Mantén el refrigerador a 10 cm de la pared y lejos de la estufa. Limpia los serpentines anualmente. Esto reduce el consumo hasta un 15%.',
-      tip5_title: '☀️ Considera la energía solar a largo plazo',
+      tip5_title: '☀️ Considera la energía solar a largo prazo',
       tip5_body: 'El retorno de la inversión solar está entre 4 y 7 años, con vida útil de 25+ años. Hay programas de financiamiento accesibles para ingresos medios.',
       tip6_title: '💡 Cambia todas las bombillas por LED',
       tip6_body: 'Un LED de 9W da la misma luz que una incandescente de 60W, consumiendo 85% menos energía y durando 15.000–25.000 horas.',
@@ -875,10 +875,11 @@
       tip12_body: 'Prefiere equipos con gas R-32 o R-290 — menor impacto ambiental. Evita el R-22, prohibido en muchos países.',
       tip13_title: '🏦 Cuidado con las cuotas y los intereses',
       tip13_body: 'Los intereses en cuotas pueden ser del 1,5% al 5% mensual. Calcula el costo total antes de comprar en cuotas.',
-      tip14_title: '♻️ Descarte correcto',
+      tip14_title: '♻️ Descarte correto',
       tip14_body: 'Los refrigeradores y aires acondicionados contienen materiales tóxicos. Muchos fabricantes ofrecen recolección gratuita. No los tires en la basura común.',
       footer_note: 'Los valores son estimaciones basadas en los datos ingresados.',
       footer_ods: 'Alineado con el ODS 7 de la ONU — Energía Limpia y Asequible. 🌿',
+      // Dynamic strings (used in JS)
       err_name: 'Ingresa el nombre del aparato.',
       err_watts: 'Ingresa una potencia válida en Watts.',
       err_hours: 'Las horas de uso deben estar entre 0,5 y 24.',
@@ -889,24 +890,24 @@
       err_comp_rate: 'Define una tarifa válida arriba.',
       confirm_clear: '¿Deseas eliminar todos los aparatos de la lista?',
       comp_group_prefix: 'Grupo',
-      comp_badge_best: '✅ Más económico en total',
-      comp_badge_worst: '⚠️ Más caro en total',
-      comp_badge_mid: '🔶 Intermedio',
+      comp_badge_best: '✅ Más econômico em total',
+      comp_badge_worst: '⚠️ Mais caro em total',
+      comp_badge_mid: '🔶 Intermediário',
       comp_col_device: 'Aparato',
       comp_col_light: 'Luz/mes',
       comp_col_total: 'Total 5 años',
-      comp_pct: '% del costo máximo',
+      comp_pct: '% do custo máximo',
       insight_title: '💡 Análisis',
       insight_best: 'es la opción más económica en total de 5 años.',
-      insight_diff5: 'Diferencia en 5 años:',
+      insight_diff5: 'Diferencia em 5 años:',
       insight_more_exp: 'más con la opción más cara.',
       insight_monthly: 'Diferencia mensual en la factura de luz:',
       insight_payback: 'El modelo más eficiente necesita',
       insight_payback2: 'meses para recuperar la diferencia de precio',
       insight_payback3: 'en ahorro de luz.',
-      insight_double: '🏆 ¡El modelo más eficiente también es más barato de comprar — doble ventaja!',
+      insight_double: '🏆 ¡El modelo más eficiente también es más barato de comprar — doble vantagem!',
       insight_green: '🌿 Los aparatos eficientes ahorran dinero y reducen emisiones — la mejor elección para tu bolsillo y el planeta.',
-      savings_current: 'Gasto actual estimado (aparatos agregados):',
+      savings_current: 'Gasto atual estimado (aparatos agregados):',
       savings_per_year: 'por año',
       savings_15: 'Con 15% de ahorro',
       savings_30: 'Con 30% de ahorro',
@@ -1095,7 +1096,7 @@
           </div>
           <div class="md:text-right">
             <span class="md:hidden" style="font-size:.72rem;color:var(--text-muted);font-weight:600">${t('th_cost')} </span>
-            <span class="num" style="font-size:.95rem;font-weight:700;color:var(--green-deep)">$ ${fmt2(item.custo)}</span>
+            <span class="num" style="font-size:.95rem;font-weight:700;color:var(--green-deep)">R$ ${fmt2(item.custo)}</span>
           </div>
         </div>
         <button class="btn-del" onclick="removerItem(${item.id})" aria-label="${t('remove_aria')} ${esc(item.nome)} ${t('remove_list')}">✕</button>`;
@@ -1107,7 +1108,7 @@
     const totalKwh = itens.reduce((s,i) => s+i.kwh,   0);
     const totalBrl = itens.reduce((s,i) => s+i.custo, 0);
     document.getElementById('total-kwh').textContent   = fmt2(totalKwh);
-    document.getElementById('total-brl').textContent   = '$ '+fmt2(totalBrl);
+    document.getElementById('total-brl').textContent   = 'R$ '+fmt2(totalBrl);
     document.getElementById('total-itens').textContent = itens.length;
   }
 
@@ -1143,13 +1144,8 @@
     const vazio  = document.getElementById('comp-vazio');
     const tarifa = parseFloat(inputTarifa.value) || 0.75;
     const grupos = {};
-    compItens.forEach(i => {
-      i.custoMes = i.kwh*tarifa; i.custo5a = i.custoMes*60;
-      if (!grupos[i.grupo]) grupos[i.grupo]=[];
-      grupos[i.grupo].push(i);
-    });
-    const temDados = compItens.length > 0;
-    vazio.classList.toggle('hidden', temDados);
+    compItens.forEach(i => { i.custoMes = i.kwh*tarifa; i.custo5a = i.custoMes*60; if (!grupos[i.grupo]) grupos[i.grupo]=[]; grupos[i.grupo].push(i); });
+    const temDados = compItens.length > 0; vazio.classList.toggle('hidden', temDados);
     if (!temDados) { el.innerHTML=''; return; }
     let html='';
     Object.entries(grupos).forEach(([grupo, membros]) => {
@@ -1168,15 +1164,14 @@
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
               <span style="font-size:.82rem;font-weight:700">${badge}</span>
-              <button class="btn-del" style="min-width:36px;min-height:36px;padding:0 8px;font-size:.75rem"
-                      onclick="removerCompItem(${m.id})" aria-label="${t('remove_aria')} ${esc(m.nome)} ${t('remove_comp')}">✕</button>
+              <button class="btn-del" style="min-width:36px;min-height:36px;padding:0 8px;font-size:.75rem" onclick="removerCompItem(${m.id})" aria-label="${t('remove_aria')} ${esc(m.nome)} ${t('remove_comp')}">✕</button>
             </div>
             <p style="font-weight:600;font-size:.95rem;margin-top:6px;line-height:1.3">${esc(m.nome)}</p>
             <p style="font-size:.78rem;color:#666;margin-top:2px">${m.watts}W · ${fmt1(m.horas)}${t('per_day')} · ${m.dias}${t('days_month')}</p>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
-              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_device')}</p><p class="num" style="font-size:.9rem;font-weight:700">$ ${fmt2(m.preco)}</p></div>
-              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_light')}</p><p class="num" style="font-size:.9rem;font-weight:700">$ ${fmt2(m.custoMes)}</p></div>
-              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_total')}</p><p class="num" style="font-size:.9rem;font-weight:700">$ ${fmt2(total)}</p></div>
+              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_device')}</p><p class="num" style="font-size:.9rem;font-weight:700">R$ ${fmt2(m.preco)}</p></div>
+              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_light')}</p><p class="num" style="font-size:.9rem;font-weight:700">R$ ${fmt2(m.custoMes)}</p></div>
+              <div style="text-align:center"><p style="font-size:.72rem;color:#666">${t('comp_col_total')}</p><p class="num" style="font-size:.9rem;font-weight:700">R$ ${fmt2(total)}</p></div>
             </div>
             <div class="comp-bar-wrap"><div class="comp-bar grow-bar" style="width:${pct}%;background:${barColor}"></div></div>
             <p style="text-align:right;font-size:.72rem;color:#888;margin-top:3px">${pct}% ${t('comp_pct')}</p>
@@ -1191,7 +1186,7 @@
         let pbHtml='';
         if (diffMes>0 && diffCompra>0) {
           const meses=Math.ceil(diffCompra/diffMes);
-          pbHtml=`<p>⏱️ ${t('insight_payback')} <strong>${meses} ${t('insight_payback2')}</strong> ($ ${fmt2(diffCompra)}) ${t('insight_payback3')}</p>`;
+          pbHtml=`<p>⏱️ ${t('insight_payback')} <strong>${meses} ${t('insight_payback2')}</strong> (R$ ${fmt2(diffCompra)}) ${t('insight_payback3')}</p>`;
         } else if (diffMes>0 && diffCompra<=0) {
           pbHtml=`<p>${t('insight_double')}</p>`;
         }
@@ -1199,8 +1194,8 @@
           <p style="font-family:var(--font-heading);font-weight:600;font-size:.95rem;color:#166534;margin-bottom:8px">${t('insight_title')}: ${esc(grupo)}</p>
           <div style="font-size:.875rem;color:#166534;display:flex;flex-direction:column;gap:6px">
             <p>📉 <strong>${esc(best.nome)}</strong> ${t('insight_best')}</p>
-            <p>💸 ${t('insight_diff5')} <strong>$ ${fmt2(diff5a)}</strong> ${t('insight_more_exp')}</p>
-            <p>⚡ ${t('insight_monthly')} <strong>$ ${fmt2(Math.abs(diffMes))}</strong>.</p>
+            <p>💸 ${t('insight_diff5')} <strong>R$ ${fmt2(diff5a)}</strong> ${t('insight_more_exp')}</p>
+            <p>⚡ ${t('insight_monthly')} <strong>R$ ${fmt2(Math.abs(diffMes))}</strong>.</p>
             ${pbHtml}
             <p style="border-top:1px solid #a7f3d0;padding-top:8px;margin-top:4px">${t('insight_green')}</p>
           </div>
@@ -1214,29 +1209,26 @@
   // ─── DICAS: PREVIEW ──────────────────────
   function renderEconomiaPreview() {
     const el = document.getElementById('economia-preview');
-    if (!itens.length) {
-      el.innerHTML=`<p style="font-size:.9rem;color:var(--text-muted);font-style:italic">${t('tips_savings_empty')}</p>`;
-      return;
-    }
+    if (!itens.length) { el.innerHTML=`<p style="font-size:.9rem;color:var(--text-muted);font-style:italic">${t('tips_savings_empty')}</p>`; return; }
     const totalMes=itens.reduce((s,i)=>s+i.custo,0);
     const eco15=totalMes*.15, eco30=totalMes*.30;
     el.innerHTML=`
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="background:#f0fdf4;border-radius:14px;padding:16px">
           <p style="font-size:.82rem;font-weight:500;color:var(--green-mid);margin-bottom:4px">${t('savings_current')}</p>
-          <p class="num" style="font-size:2rem;color:var(--green-deep)">$ ${fmt2(totalMes)}<span style="font-size:.9rem;font-family:var(--font-body);color:var(--text-muted);font-weight:400"> / ${t('kwh_month').split('/')[1].trim()}</span></p>
-          <p style="font-size:.8rem;color:var(--text-muted);margin-top:4px">$ ${fmt2(totalMes*12)} ${t('savings_per_year')}</p>
+          <p class="num" style="font-size:2rem;color:var(--green-deep)">R$ ${fmt2(totalMes)}<span style="font-size:.9rem;font-family:var(--font-body);color:var(--text-muted);font-weight:400"> / ${t('kwh_month').split('/')[1].trim()}</span></p>
+          <p style="font-size:.8rem;color:var(--text-muted);margin-top:4px">R$ ${fmt2(totalMes*12)} ${t('savings_per_year')}</p>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:14px;padding:14px;text-align:center">
             <p style="font-size:.78rem;font-weight:600;color:#0d9488;margin-bottom:4px">${t('savings_15')}</p>
-            <p class="num" style="font-size:1.2rem;color:#0f766e">- $ ${fmt2(eco15)}/mo</p>
-            <p style="font-size:.75rem;color:#0d9488;margin-top:3px">$ ${fmt2(eco15*12)}/${t('savings_per_year').split(' ')[0]} ${t('savings_less')}</p>
+            <p class="num" style="font-size:1.2rem;color:#0f766e">- R$ ${fmt2(eco15)}/mo</p>
+            <p style="font-size:.75rem;color:#0d9488;margin-top:3px">R$ ${fmt2(eco15*12)}/${t('savings_per_year').split(' ')[0]} ${t('savings_less')}</p>
           </div>
           <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:14px;text-align:center">
             <p style="font-size:.78rem;font-weight:600;color:var(--green-mid);margin-bottom:4px">${t('savings_30')}</p>
-            <p class="num" style="font-size:1.2rem;color:var(--green-deep)">- $ ${fmt2(eco30)}/mo</p>
-            <p style="font-size:.75rem;color:var(--green-mid);margin-top:3px">$ ${fmt2(eco30*12)}/${t('savings_per_year').split(' ')[0]} ${t('savings_less')}</p>
+            <p class="num" style="font-size:1.2rem;color:var(--green-deep)">- R$ ${fmt2(eco30)}/mo</p>
+            <p style="font-size:.75rem;color:var(--green-mid);margin-top:3px">R$ ${fmt2(eco30*12)}/${t('savings_per_year').split(' ')[0]} ${t('savings_less')}</p>
           </div>
         </div>
         <p style="font-size:.82rem;color:#92400e;line-height:1.6;background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:12px">
@@ -1248,12 +1240,8 @@
   // ─── HELPERS ─────────────────────────────
   function fmt1(n) { return n.toLocaleString('pt-BR',{maximumFractionDigits:1}); }
   function fmt2(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function esc(s)  { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  function mostrarErro(elId, msg) {
-    const el=document.getElementById(elId);
-    el.textContent=msg; el.classList.remove('hidden');
-    setTimeout(()=>el.classList.add('hidden'),4000);
-  }
+  function esc(s)  { return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function mostrarErro(elId, msg) { const el=document.getElementById(elId); el.textContent=msg; el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),4000); }
 
   // ─── INIT ────────────────────────────────
   setLang('pt');
