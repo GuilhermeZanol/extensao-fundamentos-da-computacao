@@ -137,6 +137,25 @@ Abas:
 * JavaScript (Vanilla JS)
 * Tailwind CSS
 * Google Fonts
+* Google Analytics
+
+---
+
+## 📊 Monitoramento e Métricas
+
+O projeto conta com integração ao Google Analytics para coleta de métricas de acesso e utilização da aplicação.
+
+Através dessa integração é possível acompanhar indicadores como:
+
+- Número de visitantes
+- Sessões realizadas
+- Páginas visualizadas
+- Tempo médio de permanência
+- Origem do tráfego
+- Dispositivos utilizados
+- Localização geográfica dos acessos
+
+Esses dados permitem compreender o comportamento dos usuários e identificar oportunidades de melhoria contínua na experiência da aplicação.
 
 ---
 
@@ -187,6 +206,33 @@ permitindo visualizar o impacto desse aparelho na conta de luz.
 * Modo escuro
 * Login e armazenamento em nuvem
 * Aplicativo mobile
+
+---
+
+## 🎓 Aprendizados
+
+O desenvolvimento do EcoWatt proporcionou uma experiência prática e multidisciplinar para toda a equipe, envolvendo não apenas programação, mas também planejamento, design, colaboração e uso de tecnologias modernas.
+
+Durante o projeto, os integrantes tiveram contato com conceitos importantes de:
+
+* Desenvolvimento Web Front-End
+* HTML, CSS e JavaScript
+* Responsividade e acessibilidade
+* Experiência do Usuário (UX)
+* Internacionalização (i18n)
+* Sustentabilidade e eficiência energética
+* Integração com Google Analytics
+* Desenvolvimento assistido por Inteligência Artificial (Vibe Coding)
+* Trabalho colaborativo em equipe
+* Controle de versão e documentação de projetos
+
+Um dos principais marcos do projeto foi o fato de representar o **primeiro contato da equipe com o GitHub**, proporcionando aprendizado sobre versionamento de código, organização de repositórios, documentação técnica, compartilhamento de arquivos e colaboração entre desenvolvedores utilizando ferramentas amplamente adotadas pelo mercado de tecnologia.
+
+A experiência também permitiu explorar o potencial das ferramentas de Inteligência Artificial no desenvolvimento de software. Foram utilizadas plataformas como Claude, ChatGPT, Gemini e GitHub Copilot para auxiliar na geração de código, refinamento de interfaces, solução de problemas e otimização da experiência do usuário.
+
+Mais do que um projeto acadêmico, o EcoWatt representou uma oportunidade de aprendizado prático sobre como equipes modernas desenvolvem produtos digitais utilizando colaboração, versionamento de código, análise de métricas e ferramentas de IA como apoio ao processo de desenvolvimento.
+
+O projeto demonstrou que, mesmo sendo a primeira experiência do grupo com GitHub e desenvolvimento colaborativo utilizando IA, foi possível construir uma aplicação funcional, acessível, multilíngue e alinhada aos princípios de sustentabilidade e inovação tecnológica.
 
 ---
 
