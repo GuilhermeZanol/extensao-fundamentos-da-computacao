@@ -147,32 +147,6 @@ EcoWatt/
 
 ---
 
-## 🚀 Como Executar
-
-### Clone o repositório
-
-```bash
-git clone https://github.com/seu-usuario/ecowatt.git
-```
-
-### Entre na pasta
-
-```bash
-cd ecowatt
-```
-
-### Abra o projeto
-
-Basta abrir o arquivo:
-
-```bash
-index.html
-```
-
-em qualquer navegador moderno.
-
----
-
 ## 💡 Exemplo de Uso
 
 Imagine um chuveiro elétrico de:
