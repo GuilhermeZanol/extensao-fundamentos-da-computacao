@@ -278,4 +278,15 @@ Sinta-se livre para utilizar, estudar e contribuir.
 
 ---
 
-Minha sugestão: adicione 3 screenshots da aplicação (Calculadora, Comparativo e Dicas). Isso sozinho faz o README parecer um projeto muito mais profissional e aumenta bastante o impacto visual no GitHub.
+## 📲 Capturas de Tela
+
+* Tela Inicial
+<img width="1290" height="2796" alt="guilhermezanol github io_extensao-fundamentos-da-computacao_(iPhone 14 Pro Max) (1)" src="https://github.com/user-attachments/assets/762e4d9b-f4d7-4c57-abf8-8e0f2517345b" />
+
+* Menu de Comparativo
+<img width="1290" height="2796" alt="guilhermezanol github io_extensao-fundamentos-da-computacao_(iPhone 14 Pro Max) (4)" src="https://github.com/user-attachments/assets/e953fd88-c001-41c6-9a8e-a1d50deb9b63" />
+
+* Menu de Dicas
+<img width="1290" height="2796" alt="guilhermezanol github io_extensao-fundamentos-da-computacao_(iPhone 14 Pro Max) (3)" src="https://github.com/user-attachments/assets/8a8b99c5-bb9b-4851-8d4e-9812530f92af" />
+
+---
