@@ -1,18 +1,12 @@
-Pelo código que você enviou, o projeto tem vários diferenciais além de uma simples calculadora:
-
-* Interface moderna e responsiva
-* Cálculo de consumo mensal e custo estimado
-* Comparativo de eletrodomésticos com análise de custo em 5 anos
-* Sistema multilíngue (PT, EN e ES)
-* Dicas de economia de energia
-* Foco em sustentabilidade e na ODS 7 da ONU
-* Desenvolvido com HTML, CSS, JavaScript e Tailwind CSS 
-
-Você pode usar um README mais profissional assim:
-
 ---
 
 # ⚡ EcoWatt — Calculadora de Energia Limpa
+
+Uma aplicação web desenvolvida para auxiliar usuários na compreensão do consumo energético residencial, permitindo calcular gastos, comparar equipamentos e identificar oportunidades de economia através de uma experiência intuitiva, acessível e sustentável.
+
+🌱 Projeto acadêmico desenvolvido para a disciplina de Fundamentos da Computação da FSG.
+
+🤖 Desenvolvido utilizando práticas de Vibe Coding com apoio de Inteligência Artificial.
 
 <div align="center">
 
@@ -41,6 +35,23 @@ Através de cálculos simples e visualizações intuitivas, o sistema permite:
 * Promover o consumo consciente de energia.
 
 O projeto foi inspirado no objetivo de tornar informações sobre eficiência energética mais acessíveis para todos.
+
+---
+
+## 🤖 Desenvolvimento com IA (Vibe Coding)
+
+Este projeto foi desenvolvido utilizando a abordagem de **Vibe Coding**, combinando criatividade humana, prototipação rápida e o uso de Inteligência Artificial como ferramenta de desenvolvimento.
+
+Durante a construção do EcoWatt foram utilizadas diversas IAs generativas para acelerar a criação de interfaces, validação de ideias, refinamento de código e melhoria da experiência do usuário, incluindo:
+
+- Claude
+- ChatGPT
+- Gemini
+- GitHub Copilot
+
+As ferramentas de IA auxiliaram principalmente na geração de componentes, estruturação do código, melhorias de acessibilidade, responsividade, internacionalização e refinamentos visuais.
+
+Apesar do suporte das IAs, todas as decisões de produto, validações, testes, adaptações e ajustes finais foram realizados pelos integrantes do grupo.
 
 ---
 
@@ -179,11 +190,27 @@ permitindo visualizar o impacto desse aparelho na conta de luz.
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Equipe do Projeto
 
-**Guilherme Zanol**
+Projeto desenvolvido para o **Itinerário Extensionista da FSG – Centro Universitário da Serra Gaúcha**, na disciplina de **Fundamentos da Computação**.
 
-Desenvolvedor em transição para Product Design, apaixonado por tecnologia, sustentabilidade e criação de produtos digitais que geram impacto real.
+### Integrantes
+
+- Gustavo Bristot Pedroso
+- Guilherme Zanol
+- Guilherme da Silva Ferreira
+- Matheus Antunes
+- Vinicius Telles
+
+---
+
+### 👨‍🏫 Instituição
+
+FSG – Centro Universitário da Serra Gaúcha
+
+Disciplina: Fundamentos da Computação
+
+Projeto Extensionista 2025/2026
 
 ---
 
