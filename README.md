@@ -126,7 +126,9 @@ Abas:
 🌿 Dicas
 ```
 
-> Recomenda-se adicionar screenshots da aplicação nesta seção.
+## 📲 Capturas de Tela
+
+<img width="4118" height="3011" alt="Telas GitHub" src="https://github.com/user-attachments/assets/26b18ff2-4940-44f8-8129-f571df923cc7" />
 
 ---
 
@@ -165,12 +167,6 @@ Esses dados permitem compreender o comportamento dos usuários e identificar opo
 EcoWatt/
 │
 ├── index.html
-├── assets/
-│   ├── images/
-│   └── icons/
-│
-├── css/
-├── js/
 │
 └── README.md
 ```
@@ -199,7 +195,6 @@ permitindo visualizar o impacto desse aparelho na conta de luz.
 
 ## 📈 Possíveis Melhorias Futuras
 
-* Integração com APIs de concessionárias
 * Histórico de consumo
 * Exportação para PDF
 * Dashboard com gráficos
@@ -278,8 +273,5 @@ Sinta-se livre para utilizar, estudar e contribuir.
 
 ---
 
-## 📲 Capturas de Tela
 
-<img width="4118" height="3011" alt="Telas GitHub" src="https://github.com/user-attachments/assets/26b18ff2-4940-44f8-8129-f571df923cc7" />
 
----
